@@ -9,7 +9,8 @@ will be downloaded from www.gnu.org and packaged appropriately.
 
 Requirements:
 
+- any POSIX-compliant shell
 - curl
 - make
-- ruby
+- pup
 - sqlite3

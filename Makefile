@@ -47,9 +47,11 @@ $(DOCUMENTS_DIR): $(RESOURCES_DIR) $(MANUAL_FILE)
 $(INFO_PLIST_FILE): src/Info.plist $(CONTENTS_DIR)
 	cp src/Info.plist $@
 
-$(INDEX_FILE): src/index.rb $(DOCUMENTS_DIR)
+$(INDEX_FILE): src/index.sh $(DOCUMENTS_DIR)
 	rm -f $@
-	ruby src/index.rb $(DOCUMENTS_DIR)/*.html | sqlite3 $@
+	src/index.sh $@ $(DOCUMENTS_DIR)/*.html
+	src/index.sh -i $@ $(DOCUMENTS_DIR)/Concept-Index.html
+	src/index.sh -i -c "Function Variable Directive" $@ $(DOCUMENTS_DIR)/Name-Index.html
 
 $(ICON_FILE): src/icon.png $(DOCSET_DIR)
 	cp src/icon.png $@
