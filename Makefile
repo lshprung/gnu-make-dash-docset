@@ -10,10 +10,34 @@ INDEX_FILE      = $(RESOURCES_DIR)/docSet.dsidx
 ICON_FILE       = $(DOCSET_DIR)/icon.png
 ARCHIVE_FILE    = $(DOCSET_NAME).tgz
 
+SRC_ICON = src/icon.png
+
 MANUAL_URL  = http://www.gnu.org/software/make/manual/make.html_node.tar.gz
 MANUAL_FILE = tmp/make.html_node.tar.gz
 
-DOCSET = $(INFO_PLIST_FILE) $(INDEX_FILE) $(ICON_FILE)
+ERROR_DOCSET_NAME = $(error DOCSET_NAME is unset)
+WARNING_MANUAL_URL = $(warning MANUAL_URL is unset)
+ERROR_MANUAL_FILE = $(error MANUAL_FILE is unset)
+.phony: err warn
+
+ifndef DOCSET_NAME
+err: ; $(ERROR_DOCSET_NAME)
+endif
+
+ifndef MANUAL_FILE
+err: ; $(ERROR_MANUAL_FILE)
+endif
+
+ifndef MANUAL_URL
+warn: 
+	$(WARNING_MANUAL_URL)
+	$(MAKE) all
+endif
+
+DOCSET = $(INFO_PLIST_FILE) $(INDEX_FILE)
+ifdef SRC_ICON
+DOCSET += $(ICON_FILE)
+endif
 
 all: $(DOCSET)
 
@@ -47,11 +71,11 @@ $(DOCUMENTS_DIR): $(RESOURCES_DIR) $(MANUAL_FILE)
 $(INFO_PLIST_FILE): src/Info.plist $(CONTENTS_DIR)
 	cp src/Info.plist $@
 
-$(INDEX_FILE): src/index.sh $(DOCUMENTS_DIR)
+$(INDEX_FILE): src/index-pages.sh $(DOCUMENTS_DIR)
 	rm -f $@
-	src/index.sh $@ $(DOCUMENTS_DIR)/*.html
-	src/index.sh -i $@ $(DOCUMENTS_DIR)/Concept-Index.html
-	src/index.sh -i -c "Function Variable Directive" $@ $(DOCUMENTS_DIR)/Name-Index.html
+	src/index-pages.sh $@ $(DOCUMENTS_DIR)/*.html
+	src/index-terms.sh "Entry" $@ $(DOCUMENTS_DIR)/Concept-Index.html
+	src/index-terms.sh "Directive" $@ $(DOCUMENTS_DIR)/Name-Index.html
 
 $(ICON_FILE): src/icon.png $(DOCSET_DIR)
-	cp src/icon.png $@
+	cp $(SRC_ICON) $@
