@@ -74,6 +74,11 @@ $(INFO_PLIST_FILE): src/Info.plist $(CONTENTS_DIR)
 $(INDEX_FILE): src/index-pages.sh $(DOCUMENTS_DIR)
 	rm -f $@
 	src/index-pages.sh $@ $(DOCUMENTS_DIR)/*.html
+ifndef NO_CSS
+	src/set-stylesheet.sh "yes" $(DOCUMENTS_DIR)/*.html
+else
+	src/set-stylesheet.sh "no" $(DOCUMENTS_DIR)/*.html
+endif
 	src/index-terms.sh "Entry" $@ $(DOCUMENTS_DIR)/Concept-Index.html
 	src/index-terms.sh "Directive" $@ $(DOCUMENTS_DIR)/Name-Index.html
 
