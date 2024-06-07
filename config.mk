@@ -13,7 +13,7 @@ $(DOCUMENTS_DIR): $(RESOURCES_DIR) $(MANUAL_FILE)
 $(INDEX_FILE): $(wildcard $(SOURCE_DIR)/src/*.sh) $(wildcard $(SCRIPTS_DIR)/*.sh) $(DOCUMENTS_DIR)
 	rm -f $@
 	$(SOURCE_DIR)/src/index-pages.sh $@ $(DOCUMENTS_DIR)/*.html
-ifndef NO_CSS
+ifneq ($(NO_CSS),yes)
 	$(SOURCE_DIR)/src/set-stylesheet.sh "yes" $(DOCUMENTS_DIR)/*.html
 else
 	$(SOURCE_DIR)/src/set-stylesheet.sh "no" $(DOCUMENTS_DIR)/*.html
