@@ -10,7 +10,7 @@ $(DOCUMENTS_DIR): $(RESOURCES_DIR) $(MANUAL_FILE)
 	mkdir -p $@
 	tar -x -z -f $(MANUAL_FILE) -C $@
 
-$(INDEX_FILE): $(wildcard $(SOURCE_DIR)/src/*.sh) $(wildcard $(SCRIPTS_DIR)/*.sh) $(DOCUMENTS_DIR)
+$(INDEX_FILE): $(SOURCE_DIR)/src/index-pages.sh $(SOURCE_DIR)/src/set-stylesheet.sh $(SCRIPTS_DIR)/gnu/index-terms.sh $(DOCUMENTS_DIR)
 	rm -f $@
 	$(SOURCE_DIR)/src/index-pages.sh $@ $(DOCUMENTS_DIR)/*.html
 ifneq ($(NO_CSS),yes)
@@ -18,5 +18,5 @@ ifneq ($(NO_CSS),yes)
 else
 	$(SOURCE_DIR)/src/set-stylesheet.sh "no" $(DOCUMENTS_DIR)/*.html
 endif
-	$(SOURCE_DIR)/src/index-terms.sh "Entry" $@ $(DOCUMENTS_DIR)/Concept-Index.html
-	$(SOURCE_DIR)/src/index-terms.sh "Directive" $@ $(DOCUMENTS_DIR)/Name-Index.html
+	$(SCRIPTS_DIR)/gnu/index-terms.sh "Entry" $@ $(DOCUMENTS_DIR)/Concept-Index.html
+	$(SCRIPTS_DIR)/gnu/index-terms.sh "Directive" $@ $(DOCUMENTS_DIR)/Name-Index.html
