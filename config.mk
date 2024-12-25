@@ -10,13 +10,13 @@ $(DOCUMENTS_DIR): $(RESOURCES_DIR) $(MANUAL_FILE)
 	mkdir -p $@
 	tar -x -z -f $(MANUAL_FILE) -C $@
 
-$(INDEX_FILE): $(SOURCE_DIR)/src/index-pages.sh $(SOURCE_DIR)/src/set-stylesheet.sh $(SCRIPTS_DIR)/gnu/index-terms-colon.sh $(DOCUMENTS_DIR)
+$(INDEX_FILE): $(SOURCE_DIR)/src/index-pages.py $(SCRIPTS_DIR)/set-stylesheet.py $(SCRIPTS_DIR)/gnu/index-terms-colon.py $(DOCUMENTS_DIR)
 	rm -f $@
-	$(SOURCE_DIR)/src/index-pages.sh $@ $(DOCUMENTS_DIR)/*.html
+	$(SOURCE_DIR)/src/index-pages.py $@ $(DOCUMENTS_DIR)/*.html
 ifneq ($(NO_CSS),yes)
-	$(SOURCE_DIR)/src/set-stylesheet.sh "yes" $(DOCUMENTS_DIR)/*.html
+	$(SCRIPTS_DIR)/set-stylesheet.py "yes" $(DOCUMENTS_DIR)/*.html
 else
-	$(SOURCE_DIR)/src/set-stylesheet.sh "no" $(DOCUMENTS_DIR)/*.html
+	$(SCRIPTS_DIR)/set-stylesheet.py "no" $(DOCUMENTS_DIR)/*.html
 endif
-	$(SCRIPTS_DIR)/gnu/index-terms-colon.sh "Entry" $@ $(DOCUMENTS_DIR)/Concept-Index.html
-	$(SCRIPTS_DIR)/gnu/index-terms-colon.sh "Directive" $@ $(DOCUMENTS_DIR)/Name-Index.html
+	$(SCRIPTS_DIR)/gnu/index-terms-colon.py Entry $@ $(DOCUMENTS_DIR)/Concept-Index.html
+	$(SCRIPTS_DIR)/gnu/index-terms-colon.py Directive $@ $(DOCUMENTS_DIR)/Name-Index.html
